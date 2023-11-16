@@ -1,37 +1,52 @@
 package com.example.employeemanagement.service;
 
-import com.example.employeemanagement.dto.EmployeeRequestDto;
-import com.example.employeemanagement.dto.EmployeeResponseDto;
+import com.example.employeemanagement.dto.EmployeeDto;
+import com.example.employeemanagement.entity.Employee;
+import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    @Autowired
+    private  EmployeeMapper employeeMapper;
 
     private EmployeeServiceImpl(EmployeeRepository employeeRepository){
         this.employeeRepository=employeeRepository;
+
     }
     @Override
-    public List<EmployeeResponseDto> getAllEmployees() {
+    public List<EmployeeDto> getAllEmployees() {
+        employeeRepository.findAll().stream().map(employee->employeeMapper.EmployeeToEmployeeDto(employee)).collect(Collectors.toList());
         return null;
     }
 
     @Override
-    public EmployeeResponseDto addEmployee(EmployeeRequestDto request) {
-        return null;
+    public EmployeeDto addEmployee(EmployeeDto request) {
+        Employee employee=EmployeeMapper.EMPLOYEE_MAPPER.EmployeeDtoToEmployee(request);
+        employee= employeeRepository.save(employee);
+        return EmployeeMapper.EMPLOYEE_MAPPER.EmployeeToEmployeeDto(employee);
     }
 
     @Override
-    public EmployeeResponseDto updateEmployee(EmployeeRequestDto request) {
-        return null;
+    public EmployeeDto updateEmployee(EmployeeDto request) {
+        Employee employee=employeeRepository.findById(request.getId()).get();
+        Assert.notNull(employee,"Employee not found.");
+        return addEmployee(request) ;
     }
 
     @Override
     public void deleteEmployee(Long id) {
+      Employee employee=employeeRepository.findById(id).get();
+        Assert.notNull(employee,"Employee not found.");
+        employeeRepository.delete(employee);
 
     }
 }

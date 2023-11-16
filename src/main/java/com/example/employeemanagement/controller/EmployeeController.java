@@ -1,7 +1,6 @@
 package com.example.employeemanagement.controller;
 
-import com.example.employeemanagement.dto.EmployeeRequestDto;
-import com.example.employeemanagement.dto.EmployeeResponseDto;
+import com.example.employeemanagement.dto.EmployeeDto;
 import com.example.employeemanagement.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +18,15 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
     @GetMapping(value="/employee")
-    ResponseEntity<List<EmployeeResponseDto>> getAllEmployees(){
+    ResponseEntity<List<EmployeeDto>> getAllEmployees(){
         return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
     }
     @PostMapping(value="/employee")
-    ResponseEntity<EmployeeResponseDto> addEmployee(@RequestBody EmployeeRequestDto request){
+    ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto request){
         return new ResponseEntity<>(employeeService.addEmployee(request), HttpStatus.OK);
     }
     @PutMapping(value="/employee")
-    ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody EmployeeRequestDto request){
+    ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto request){
         return new ResponseEntity<>(employeeService.updateEmployee(request), HttpStatus.OK);
     }
     @DeleteMapping(value="/employee/{id}")

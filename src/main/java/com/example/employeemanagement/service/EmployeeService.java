@@ -1,16 +1,15 @@
 package com.example.employeemanagement.service;
 
-import com.example.employeemanagement.dto.EmployeeRequestDto;
-import com.example.employeemanagement.dto.EmployeeResponseDto;
+import com.example.employeemanagement.dto.EmployeeDto;
 
 import java.util.List;
 
 public interface EmployeeService {
-    List<EmployeeResponseDto> getAllEmployees();
+    List<EmployeeDto> getAllEmployees();
 
-    EmployeeResponseDto addEmployee(EmployeeRequestDto request);
+    EmployeeDto addEmployee(EmployeeDto request);
 
-    EmployeeResponseDto updateEmployee(EmployeeRequestDto request);
+    EmployeeDto updateEmployee(EmployeeDto request);
 
     void deleteEmployee(Long id);
 }
