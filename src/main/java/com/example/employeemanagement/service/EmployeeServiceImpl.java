@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +25,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public List<EmployeeDto> getAllEmployees() {
-        employeeRepository.findAll().stream().map(employee->employeeMapper.EmployeeToEmployeeDto(employee)).collect(Collectors.toList());
-        return null;
+        return employeeRepository.findAll().stream().map(employee->employeeMapper.EmployeeToEmployeeDto(employee)).collect(Collectors.toList());
+
     }
 
     @Override
@@ -37,16 +38,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployee(EmployeeDto request) {
-        Employee employee=employeeRepository.findById(request.getId()).get();
+        Optional<Employee> employee= employeeRepository.findById(request.getId());
+        if(employee.isPresent()){
+            return addEmployee(request) ;
+        }
         Assert.notNull(employee,"Employee not found.");
-        return addEmployee(request) ;
+        return null;
     }
 
     @Override
     public void deleteEmployee(Long id) {
-      Employee employee=employeeRepository.findById(id).get();
+       Optional<Employee> employee= employeeRepository.findById(id);
+        employee.ifPresent(emp -> {
+            employeeRepository.delete(emp);
+        });
+
+
         Assert.notNull(employee,"Employee not found.");
-        employeeRepository.delete(employee);
+
 
     }
 }
